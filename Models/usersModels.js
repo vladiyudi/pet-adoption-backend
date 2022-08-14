@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+const bcrypt = require('bcrypt');
 
 const pathUsersDb = path.resolve(__dirname, "../database/usersDb.json");
 
@@ -26,7 +27,6 @@ const addUserToDB = async (user) => {
 async function getUserByEmail(email) {
     try {
       const allUsers = await getAllUsers();
-      console.log(allUsers)
       const user = allUsers.find((user) => user.email === email);
       return user
     } catch (err) {
@@ -34,11 +34,11 @@ async function getUserByEmail(email) {
     }
   }
 
-const getUserByEmailAndPassword = async (email, password) => {
-    const allUsers = await getAllUsers();
-    const user = allUsers.find((user) => user.email === email && user.password === password);
-    return user;
+const hashPassword = async (password) => {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return hashedPassword;
 }
 
 
-module.exports = {addUserToDB, getUserByEmail, getUserByEmailAndPassword, getAllUsers}
+module.exports = {addUserToDB, getUserByEmail, getAllUsers, hashPassword};
