@@ -61,35 +61,18 @@ const passwordMatch = (req, res, next) => {
 
 
 const validatePasswordMatch = async (req, res, next) => {
-  // const user = await getUserByEmail(req.body.email);
+
 
   const existingMongoU = await getMongoUserByEmail(req.body.email);
-  // console.log("validate password", existingMongoU)
+
   bcrypt.compare(req.body.password, existingMongoU.password,(err, result) => {if (result) next(); else res.status(400).send("Password is incorrect");
   return
 } );
 
-  // bcrypt.compare(req.body.password, user.password, (err, result) => {
-  //   if (result) {
-  //     next();
-  //   } else {
-  //     res.status(400).send("Password is incorrect");
-  //     return;
-  //   }
-  // });
 };
 
 const validateEmail = async (req, res, next) => {
-  // const allUsers = await getAllUsers();
-
   const existingMongoU = await getMongoUserByEmail(req.body.email);
-  // console.log("validate email", existingMongoU)
-  // if (existingMongoU) {next()}
-  // else {
-  //   res.status(400).send("User doesnt exists");
-  // }
-
-  // const user = allUsers.find((user) => user.email === req.body.email);
   if (existingMongoU) next();
   else {
     res.status(400).send("User doesn't exist");

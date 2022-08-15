@@ -8,6 +8,8 @@ router.post('/signUp', passwordMatch, validateSignup(signUpSchema), validateNewU
 
 router.post('/login', validateLogin(loginSchema), validateEmail, validatePasswordMatch, login)
 
-router.put('/:id', validateUpdateUser(updateSchema), updateUser)
+router.put('/:id', 
+// validateUpdateUser(updateSchema), 
+updateUser)
 
 module.exports = router

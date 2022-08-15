@@ -4,10 +4,10 @@ const userSchema = new mongoose.Schema({
     userName: String,
     email: String,
     password: String,
-    date: {type: Date, default: Date.now},
+    date: String,
     id: String,
     lastName: String,
-    phoneNumber: Number,
+    phoneNumber: String,
     bio: String,
     adoptedPets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}],
     fosteredPets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}]

@@ -25,8 +25,14 @@ properties: {
     userName: {type: "string", minLength: 2, maxLength: 50},
     email: { type: "string", format: "email" },
     lastName: { type: "string", maxLength: 50},
-    phoneNumber: { type: "number", maxLength: 10},
+    phone: { type: "string", maxLength: 10},
     bio: { type: "string", maxLength: 500},
+    _id: { type: "string" },
+    // password: { type: "string"},
+    date: { type: "string"},
+    phoneNumber: { type: "string"},
+    addoptedPets: { type: "array"},
+    fosteredPets: { type: "array"},
 }
 }
 
