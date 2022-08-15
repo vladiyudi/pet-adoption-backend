@@ -1,8 +1,33 @@
 const fs = require("fs").promises;
 const path = require("path");
 const bcrypt = require('bcrypt');
-
 const pathUsersDb = path.resolve(__dirname, "../database/usersDb.json");
+
+const userCol = require('../Schemas/mongooseSchemas')
+
+// const newUser = new userCol ({userName:'Vasya', email:'vasya.com', password:'123', date:'12/34/45', id:'34343', lastName:'Petrov', phoneNumber:'55555', bio:'cool guy'})
+
+const getMongoUserByEmail = async (email) => {
+  try {
+    const user = await userCol.findOne({ email });
+    return user;
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+
+const saveUser = async (user)=>{
+    try{
+      const newUser = new userCol(user)
+        const saved = await newUser.save()
+        console.log('saved', saved)
+    return saved
+    } catch (err){
+        console.log(err)
+    }    
+}
+
 
 const getAllUsers = async () => {
     try{
@@ -41,4 +66,4 @@ const hashPassword = async (password) => {
 }
 
 
-module.exports = {addUserToDB, getUserByEmail, getAllUsers, hashPassword};
+module.exports = {addUserToDB, getUserByEmail, getAllUsers, hashPassword, saveUser, getMongoUserByEmail};

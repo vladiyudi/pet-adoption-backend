@@ -3,7 +3,8 @@ const ajv = new Ajv();
 const bcrypt = require("bcrypt");
 const addFormats = require("ajv-formats");
 addFormats(ajv);
-const { getUserByEmail, getAllUsers } = require("../Models/usersModels");
+const { getUserByEmail, getAllUsers, getMongoUserByEmail } = require("../Models/usersModels");
+
 
 function validateSignup(schema) {
   return (req, res, next) => {
@@ -39,8 +40,11 @@ const validateLogin = (schema) => {
 };
 
 const validateNewUser = async (req, res, next) => {
-  const existingUser = await getUserByEmail(req.body.email);
-  if (!existingUser) {
+  // const existingUser = await getUserByEmail(req.body.email);
+
+const existingMongoU = await getMongoUserByEmail(req.body.email);
+
+  if (!existingMongoU) {
     next();
   } else {
     res.status(400).send("User already exists");
@@ -55,32 +59,38 @@ const passwordMatch = (req, res, next) => {
   next();
 };
 
-//   const validateUserAndPassword = async (req, res, next) => {
-//     const user = await getUserByEmailAndPassword(req.body.email, req.body.password)
-//     if (!user) {
-//       res.status(400).send("User does not exist");
-//       return;
-//     } else {
-//       next();
-//     }
-//   }
 
 const validatePasswordMatch = async (req, res, next) => {
-  const user = await getUserByEmail(req.body.email);
-  bcrypt.compare(req.body.password, user.password, (err, result) => {
-    if (result) {
-      next();
-    } else {
-      res.status(400).send("Password is incorrect");
-      return;
-    }
-  });
+  // const user = await getUserByEmail(req.body.email);
+
+  const existingMongoU = await getMongoUserByEmail(req.body.email);
+  // console.log("validate password", existingMongoU)
+  bcrypt.compare(req.body.password, existingMongoU.password,(err, result) => {if (result) next(); else res.status(400).send("Password is incorrect");
+  return
+} );
+
+  // bcrypt.compare(req.body.password, user.password, (err, result) => {
+  //   if (result) {
+  //     next();
+  //   } else {
+  //     res.status(400).send("Password is incorrect");
+  //     return;
+  //   }
+  // });
 };
 
 const validateEmail = async (req, res, next) => {
-  const allUsers = await getAllUsers();
-  const user = allUsers.find((user) => user.email === req.body.email);
-  if (user) next();
+  // const allUsers = await getAllUsers();
+
+  const existingMongoU = await getMongoUserByEmail(req.body.email);
+  // console.log("validate email", existingMongoU)
+  // if (existingMongoU) {next()}
+  // else {
+  //   res.status(400).send("User doesnt exists");
+  // }
+
+  // const user = allUsers.find((user) => user.email === req.body.email);
+  if (existingMongoU) next();
   else {
     res.status(400).send("User doesn't exist");
     return;

@@ -25,7 +25,7 @@ properties: {
     userName: {type: "string", minLength: 2, maxLength: 50},
     email: { type: "string", format: "email" },
     lastName: { type: "string", maxLength: 50},
-    phoneNumber: { type: "string", maxLength: 10},
+    phoneNumber: { type: "number", maxLength: 10},
     bio: { type: "string", maxLength: 500},
 }
 }
