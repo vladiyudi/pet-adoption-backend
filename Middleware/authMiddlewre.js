@@ -3,7 +3,7 @@ const ajv = new Ajv();
 const bcrypt = require("bcrypt");
 const addFormats = require("ajv-formats");
 addFormats(ajv);
-const { getUserByEmail, getAllUsers, getMongoUserByEmail } = require("../Models/usersModels");
+const { getMongoUserByEmail } = require("../Models/usersModels");
 
 
 function validateSignup(schema) {
@@ -40,10 +40,7 @@ const validateLogin = (schema) => {
 };
 
 const validateNewUser = async (req, res, next) => {
-  // const existingUser = await getUserByEmail(req.body.email);
-
 const existingMongoU = await getMongoUserByEmail(req.body.email);
-
   if (!existingMongoU) {
     next();
   } else {
@@ -61,10 +58,7 @@ const passwordMatch = (req, res, next) => {
 
 
 const validatePasswordMatch = async (req, res, next) => {
-
-
   const existingMongoU = await getMongoUserByEmail(req.body.email);
-
   bcrypt.compare(req.body.password, existingMongoU.password,(err, result) => {if (result) next(); else res.status(400).send("Password is incorrect");
   return
 } );

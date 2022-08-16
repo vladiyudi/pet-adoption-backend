@@ -5,15 +5,17 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String,
     date: String,
-    id: String,
+    // id: String,
     lastName: String,
     phoneNumber: String,
     bio: String,
+    admin: Boolean,
+    profileImage: String,
     adoptedPets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}],
-    fosteredPets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}]
+    fosteredPets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}],
 })
 
-module.exports = mongoose.model('User', userSchema)
+
 
 const petSchema = new mongoose.Schema({
     name: String,
@@ -25,3 +27,5 @@ const petSchema = new mongoose.Schema({
     dietery: []
 
 })
+
+module.exports = mongoose.model('User', userSchema)

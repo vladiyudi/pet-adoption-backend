@@ -1,15 +1,12 @@
 const { Console } = require("console");
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const {
-  addUserToDB,
-  getUserByEmail,
   hashPassword,
   saveUser,
 } = require("../Models/usersModels");
 const { getMongoUserByEmail } = require("../Models/usersModels");
 const userCol = require("../Schemas/mongooseSchemas");
-const { findById } = require("../Schemas/mongooseSchemas");
 
 const signup = async (req, res) => {
   try {
@@ -25,6 +22,8 @@ const signup = async (req, res) => {
       bio: "",
       adoptedPets: [],
       fosteredPets: [],
+      admin: false,
+      profileImage: "",
     };
     const dbUser = await saveUser(user);
     if (dbUser) res.send(dbUser);
@@ -45,11 +44,7 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const { userName, email, lastName, bio, phoneNumber } = req.body;
-
-    console.log(req.body);
-
     const user = await userCol.findById(id);
     user.userName = userName;
     user.email = email;
@@ -63,4 +58,13 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { login, signup, updateUser };
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await userCol.find();
+        res.send(users);
+    } catch (err) {
+        res.status(500).send("problem with getAllUsers");
+    }
+}
+
+module.exports = { login, signup, updateUser, getAllUsers };
