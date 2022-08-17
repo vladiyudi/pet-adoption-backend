@@ -1,10 +1,11 @@
 const { v4: uuidv4 } = require("uuid");
-const {getPetsFromDB} = require("../Models/petsModels");
+const {queryPetsfromMongo} = require("../Models/petsModels");
 const petCol = require('../Schemas/petSchema');
 
 const getAllPets =async (req, res) => {
     try {
-        const allPets = await getPetsFromDB();
+        const allPets = await petCol.find().sort({
+            dateCreated: -1});
         res.send(allPets);
     } catch (err) {
         console.log(err);
@@ -21,4 +22,13 @@ const addNewPet = async (req, res) => {
     }
 }
 
-module.exports = {getAllPets, addNewPet};
+const searchPets = async (req, res) => {
+    try {
+        const searchResult = await queryPetsfromMongo(req.body)
+        res.send(searchResult);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = {getAllPets, addNewPet, searchPets};

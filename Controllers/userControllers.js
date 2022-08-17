@@ -60,7 +60,8 @@ const updateUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        const users = await userCol.find();
+        const users = await userCol.find()
+        // .sort({'dateCreated': -1});
         res.send(users);
     } catch (err) {
         res.status(500).send("problem with getAllUsers");
