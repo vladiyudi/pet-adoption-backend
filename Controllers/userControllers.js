@@ -7,6 +7,7 @@ const {
 } = require("../Models/usersModels");
 const { getMongoUserByEmail } = require("../Models/usersModels");
 const userCol = require("../Schemas/mongooseSchemas");
+const {updatePetStatusAdopted} = require("../Models/petsModels");
 
 const signup = async (req, res) => {
   try {
@@ -16,7 +17,6 @@ const signup = async (req, res) => {
       userName,
       email,
       password: hasshedPassword,
-      date: new Date().toLocaleString(),
       lastName: "",
       phoneNumber: "",
       bio: "",
@@ -61,11 +61,49 @@ const updateUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
     try {
         const users = await userCol.find()
-        // .sort({'dateCreated': -1});
+        .sort({'dateCreated': -1});
         res.send(users);
     } catch (err) {
         res.status(500).send("problem with getAllUsers");
     }
 }
 
-module.exports = { login, signup, updateUser, getAllUsers };
+const addPetToFavorites = async (req, res) => {
+try{
+    const {petId} = req.body;
+    const {uid} = req.params;
+    const user = await userCol.findById(uid);
+    user.interested = {...user.interested, [petId]: petId};
+    const updatedUser = await user.save();
+    res.send(updatedUser);
+} catch (err) {
+    res.status(500).send("problem with addPetToFavorites");
+}
+}
+
+const removePetFromFavorites = async (req, res) => {
+    try{
+        const {uid, petId} = req.params;
+        const user = await userCol.findById(uid);
+        delete user.interested[petId];
+        const updatedUser = await user.save();
+        res.send(updatedUser);
+    } catch (err) {
+        res.status(500).send("problem with removePetFromFavorites");
+    }
+}
+
+const addPetToAdopted = async (req, res) => {
+try{
+    const {petId} = req.body;
+    const {uid} = req.params;
+    const user = await userCol.findById(uid);
+    user.adoptedPets = {...user.adoptedPets, [petId]: petId};
+    const updatedUser = await user.save();
+    // const updatedPet = await updatePetStatusAdopted(petId, uid);
+    res.send(updatedUser);} 
+    catch (err) {
+    res.status(500).send("problem with addPetToAdopted");}
+}
+
+module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites };

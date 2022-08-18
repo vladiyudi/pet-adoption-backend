@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {signup, login, updateUser, getAllUsers} = require('../Controllers/userControllers.js')
+const {signup, login, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites} = require('../Controllers/userControllers.js')
 const {validateSignup, passwordMatch, validateNewUser, validateLogin, validatePasswordMatch, validateEmail, validateUpdateUser}=require('../Middleware/authMiddlewre')
 const {signUpSchema, loginSchema, updateSchema}=require('../Schemas/Schemas.js')
 
@@ -13,5 +13,11 @@ validateUpdateUser(updateSchema),
 updateUser)
 
 router.get('/all', getAllUsers)
+
+router.post('/:uid/favorites', addPetToFavorites)
+
+router.post('/:uid/adopted', addPetToAdopted)
+
+router.delete('/:uid/favorites/:petId', removePetFromFavorites)
 
 module.exports = router

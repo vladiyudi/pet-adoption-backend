@@ -4,28 +4,15 @@ const userSchema = new mongoose.Schema({
     userName: String,
     email: String,
     password: String,
-    date: String,
-    // id: String,
+    dateCreated: {type: Date, default: Date.now},
     lastName: String,
     phoneNumber: String,
     bio: String,
     admin: Boolean,
     profileImage: String,
-    adoptedPets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}],
-    fosteredPets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Pet'}],
-})
-
-
-
-const petSchema = new mongoose.Schema({
-    name: String,
-    type: String,
-    bio: String,
-    dateCreated: {type: Date, default: Date.now},
-    height: {type: Number, min :1, max: 100},
-    weight: {type: Number, min :1, max: 100},
-    dietery: []
-
+    adoptedPets: Object,
+    fosteredPets: Object,
+    interested: Object,
 })
 
 module.exports = mongoose.model('User', userSchema)

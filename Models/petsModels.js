@@ -24,4 +24,16 @@ const queryPetsfromMongo = async (query) => {
   }
 };
 
-module.exports = { queryPetsfromMongo };
+const updatePetStatusAdopted = async (petId, userId) => {
+    try {
+    const pet = await petCol.findById(petId);
+    pet.adoptionStatus = "Adopted";
+    pet.adoptedBy = userId;
+    const savedPet = await pet.save();
+    return savedPet;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = { queryPetsfromMongo, updatePetStatusAdopted };

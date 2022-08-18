@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
-const {queryPetsfromMongo} = require("../Models/petsModels");
+const {queryPetsfromMongo, updatePetStatusAdopted} = require("../Models/petsModels");
 const petCol = require('../Schemas/petSchema');
 
 const getAllPets =async (req, res) => {
@@ -31,4 +31,14 @@ const searchPets = async (req, res) => {
     }
 }
 
-module.exports = {getAllPets, addNewPet, searchPets};
+const addPetToAdopted = async (req, res) => {
+    try{
+        const {uid, petId} = req.params;
+        const updatedPet = await updatePetStatusAdopted(petId, uid);
+        res.send(updatedPet);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted};
