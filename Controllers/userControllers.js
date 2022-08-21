@@ -80,7 +80,7 @@ try{
 
     // console.log(user)
 
-    user.interested = {...user.interested, [petId]: petId};
+    user.interested = [...user.interested, petId];
     const updatedUser = await user.save();
     res.send(updatedUser);
 } catch (err) {
@@ -92,7 +92,7 @@ const removePetFromFavorites = async (req, res) => {
     try{
         const {uid, petId} = req.params;
         const user = await userCol.findById(uid);
-        delete user.interested[petId];
+        user.interested = user.interested.filter(pet => pet!=petId)
         const updatedUser = await user.save();
         res.send(updatedUser);
     } catch (err) {

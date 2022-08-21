@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema({
     admin: Boolean,
     profileImage: String,
     adoptedPets: Array,
-    fosteredPets: Object,
-    interested: Object,
+    fosteredPets: Array,
+    interested: Array,
 })
 
 module.exports = mongoose.model('User', userSchema)
