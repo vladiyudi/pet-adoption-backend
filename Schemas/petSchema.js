@@ -11,10 +11,9 @@ const petSchema = new mongoose.Schema({
     weight: {type: Number, min :1, max: 100},
     dietary: Array,
     hypoallergenic: Boolean,
-    picture: {type: String, default:'https://www.petzone.co.ke/wp-content/uploads/2021/02/cat.png'},
+    picture: {type: String, default:'https://thumbs.dreamstime.com/b/face-dog-adorable-pedigree-outline-illustration-eps-84615014.jpg'},
     adoptionStatus: {type: String, default: "Available"},
-    adoptedBy: {type: String, default: ""},
-    fosteredBy: {type: String, default: ""},
+    owner: {type: String, default: ""},
 })
 
 module.exports = mongoose.model('Pets', petSchema)

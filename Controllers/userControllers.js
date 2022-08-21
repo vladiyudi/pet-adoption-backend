@@ -70,9 +70,16 @@ const getAllUsers = async (req, res) => {
 
 const addPetToFavorites = async (req, res) => {
 try{
+
     const {petId} = req.body;
     const {uid} = req.params;
+
+  // console.log(uid, petId);
+
     const user = await userCol.findById(uid);
+
+    // console.log(user)
+
     user.interested = {...user.interested, [petId]: petId};
     const updatedUser = await user.save();
     res.send(updatedUser);
@@ -98,7 +105,8 @@ try{
     const {petId} = req.body;
     const {uid} = req.params;
     const user = await userCol.findById(uid);
-    user.adoptedPets = {...user.adoptedPets, [petId]: petId};
+    user.adoptedPets = [...user.adoptedPets, petId];
+    user.fosteredPets = user.fosteredPets.filter(pet => pet !== petId);
     const updatedUser = await user.save();
     // const updatedPet = await updatePetStatusAdopted(petId, uid);
     res.send(updatedUser);} 
@@ -106,4 +114,28 @@ try{
     res.status(500).send("problem with addPetToAdopted");}
 }
 
-module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites };
+const removePetFromAdoped = async (req, res) => {
+  try{
+    const {uid, petID} = req.params;
+    const user = await userCol.findById(uid);
+    user.adoptedPets = user.adoptedPets.filter(pet => pet !== petID);
+    const updatedUser = await user.save();
+res.send(updatedUser);  
+  }catch(err) {
+    res.status(500).send("problem with removePetFromAdoped");
+  }
+}
+
+const addPetToFosteredUser = async (req, res) => {
+  try{
+    const {uid, petId} = req.params;
+    const user = await userCol.findById(uid);
+    user.fosteredPets = [...user.fosteredPets, petId];
+    const updatedUser = await user.save();
+    res.send(updatedUser);
+  }catch(err) {
+    res.status(500).send("problem with addPetToFosteredUser");
+  }
+}
+
+module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser };

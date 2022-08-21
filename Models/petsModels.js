@@ -28,7 +28,7 @@ const updatePetStatusAdopted = async (petId, userId) => {
     try {
     const pet = await petCol.findById(petId);
     pet.adoptionStatus = "Adopted";
-    pet.adoptedBy = userId;
+    pet.owner = userId;
     const savedPet = await pet.save();
     return savedPet;
     } catch (err) {

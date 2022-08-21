@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     bio: String,
     admin: Boolean,
     profileImage: String,
-    adoptedPets: Object,
+    adoptedPets: Array,
     fosteredPets: Object,
     interested: Object,
 })

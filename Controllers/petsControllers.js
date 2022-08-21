@@ -41,4 +41,32 @@ const addPetToAdopted = async (req, res) => {
     }
 }
 
-module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted};
+const removefromAdopted = async (req, res) => {
+    try{
+        const {petId}= req.params;
+        const pet = await petCol.findById(petId);
+        pet.adoptionStatus = "Available";
+        pet.owner = "";
+        const updatedPet = await pet.save();
+        res.send(updatedPet);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const addToFostered = async (req, res) => {
+    try{
+        const {petId, userId} = req.params;
+        // console.log(petId, userId)
+        const pet = await petCol.findById(petId);
+        pet.adoptionStatus = "Fostered";
+        pet.owner = userId;
+        const updatedPet = await pet.save();
+        res.send(updatedPet);
+    }
+     catch (err) {
+        console.log(err);
+    
+}}
+
+module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered};
