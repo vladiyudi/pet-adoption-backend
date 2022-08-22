@@ -65,8 +65,28 @@ const addToFostered = async (req, res) => {
         res.send(updatedPet);
     }
      catch (err) {
-        console.log(err);
-    
+        console.log(err);  
 }}
 
-module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered};
+const editPet = async (req, res) => {
+    try{
+        const {petId} = req.params;
+        const {name, type, breed, weight, height, color, hypoallergenic, bio, dietary} = req.body;
+        const pet = await petCol.findById(petId);
+        pet.name = name;
+        pet.breed = breed;
+        pet.type = type;
+        pet.bio = bio;
+        pet.hypoallergenic = hypoallergenic;
+        pet.dietary = dietary;
+        pet.weight = weight;
+        pet.height = height;
+        pet.color = color;
+        const updatedPet = await pet.save();
+        res.send(updatedPet);
+    }catch(err){
+        console.log(err);
+    }
+}
+
+module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet};

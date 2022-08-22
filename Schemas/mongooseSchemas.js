@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     profileImage: String,
     adoptedPets: Array,
     fosteredPets: Array,
-    interested: Array,
+    interested: Array ,
 })
 
 module.exports = mongoose.model('User', userSchema)
