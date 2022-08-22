@@ -67,7 +67,6 @@ const addToFostered = async (req, res) => {
      catch (err) {
         console.log(err);  
 }}
-
 const editPet = async (req, res) => {
     try{
         const {petId} = req.params;
@@ -88,5 +87,4 @@ const editPet = async (req, res) => {
         console.log(err);
     }
 }
-
 module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet};
