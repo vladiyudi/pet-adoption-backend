@@ -1,13 +1,13 @@
-const { Console } = require("console");
-// const { v4: uuidv4 } = require("uuid");
-const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
+
 const {
   hashPassword,
   saveUser,
 } = require("../Models/usersModels");
 const { getMongoUserByEmail } = require("../Models/usersModels");
 const userCol = require("../Schemas/mongooseSchemas");
-const {updatePetStatusAdopted} = require("../Models/petsModels");
+
 
 const signup = async (req, res) => {
   try {
@@ -32,10 +32,13 @@ const signup = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+const login = (req, res) => {
   try {
-    const mongoUser = await getMongoUserByEmail(req.body.email);
-    if (mongoUser) res.send(mongoUser);
+
+   const user = req.body 
+    const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET, { expiresIn: "2d"})
+    res.cookie('token', token, { maxAge: 15151252151251 })
+    res.send({user, ok:true});
   } catch (err) {
     res.status(500).send("problem with login");
   }
@@ -70,16 +73,9 @@ const getAllUsers = async (req, res) => {
 
 const addPetToFavorites = async (req, res) => {
 try{
-
     const {petId} = req.body;
     const {uid} = req.params;
-
-  // console.log(uid, petId);
-
     const user = await userCol.findById(uid);
-
-    // console.log(user)
-
     user.interested = [...user.interested, petId];
     const updatedUser = await user.save();
     res.send(updatedUser);
@@ -108,7 +104,6 @@ try{
     user.adoptedPets = [...user.adoptedPets, petId];
     user.fosteredPets = user.fosteredPets.filter(pet => pet !== petId);
     const updatedUser = await user.save();
-    // const updatedPet = await updatePetStatusAdopted(petId, uid);
     res.send(updatedUser);} 
     catch (err) {
     res.status(500).send("problem with addPetToAdopted");}

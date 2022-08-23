@@ -59,7 +59,10 @@ const passwordMatch = (req, res, next) => {
 
 const validatePasswordMatch = async (req, res, next) => {
   const existingMongoU = await getMongoUserByEmail(req.body.email);
-  bcrypt.compare(req.body.password, existingMongoU.password,(err, result) => {if (result) next(); else res.status(400).send("Password is incorrect");
+  bcrypt.compare(req.body.password, existingMongoU.password,(err, result) => {if (result) {
+    req.body = existingMongoU
+    next()} 
+    else res.status(400).send("Password is incorrect");
   return
 } );
 
