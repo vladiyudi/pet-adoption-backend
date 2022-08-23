@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const {queryPetsfromMongo, updatePetStatusAdopted} = require("../Models/petsModels");
 const petCol = require('../Schemas/petSchema');
+const multer = require('multer')
 
 const getAllPets =async (req, res) => {
     try {
@@ -14,6 +15,7 @@ const getAllPets =async (req, res) => {
 
 const addNewPet = async (req, res) => {
     try {
+        // console.log(req.body.picture)
         const newPet = new petCol(req.body);
         const savedPet = await newPet.save();
         res.send(savedPet);
@@ -70,7 +72,7 @@ const addToFostered = async (req, res) => {
 const editPet = async (req, res) => {
     try{
         const {petId} = req.params;
-        const {name, type, breed, weight, height, color, hypoallergenic, bio, dietary} = req.body;
+        const {name, type, breed, weight, height, color, hypoallergenic, bio, dietary, picture} = req.body;
         const pet = await petCol.findById(petId);
         pet.name = name;
         pet.breed = breed;
@@ -81,6 +83,7 @@ const editPet = async (req, res) => {
         pet.weight = weight;
         pet.height = height;
         pet.color = color;
+        pet.picture = picture;
         const updatedPet = await pet.save();
         res.send(updatedPet);
     }catch(err){

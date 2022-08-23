@@ -15,6 +15,7 @@ const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
 app.use(express.json())
 app.use(cors())
+app.use('/images', express.static('images'))
 
 app.use('/api/users', userRouter)
 app.use('/api/pets', petRouter)
