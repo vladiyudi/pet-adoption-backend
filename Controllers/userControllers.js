@@ -34,7 +34,6 @@ const signup = async (req, res) => {
 
 const login = (req, res) => {
   try {
-
    const user = req.body 
     const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET, { expiresIn: "2d"})
     res.cookie('token', token, { maxAge: 15151252151251 })
@@ -43,6 +42,16 @@ const login = (req, res) => {
     res.status(500).send("problem with login");
   }
 };
+
+const handleLogout=async (req, res) => {
+  try{
+  //  if (req.body.decoded){
+    res.clearCookie('token');
+    res.send({ok:true});
+  }catch(err) {
+    res.status(500).send("problem with handleLogout");
+  }
+}
 
 const updateUser = async (req, res) => {
   try {
@@ -133,4 +142,4 @@ const addPetToFosteredUser = async (req, res) => {
   }
 }
 
-module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser };
+module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser, handleLogout};

@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 const addFormats = require("ajv-formats");
 addFormats(ajv);
 const { getMongoUserByEmail } = require("../Models/usersModels");
-
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 function validateSignup(schema) {
   return (req, res, next) => {
@@ -77,6 +78,22 @@ const validateEmail = async (req, res, next) => {
   }
 };
 
+const auth = (req, res, next) => {
+  // console.log("cook", req.cookies)
+  // console.log("req", req)
+  const { token } = req.cookies;
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+    // req.body.decoded = decoded.id;
+    next();
+  }
+  );
+}
+
 module.exports = {
   validateSignup,
   passwordMatch,
@@ -85,4 +102,5 @@ module.exports = {
   validatePasswordMatch,
   validateEmail,
   validateUpdateUser,
+  auth,
 };
