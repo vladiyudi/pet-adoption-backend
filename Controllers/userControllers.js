@@ -7,6 +7,7 @@ const {
 } = require("../Models/usersModels");
 const { getMongoUserByEmail } = require("../Models/usersModels");
 const userCol = require("../Schemas/mongooseSchemas");
+const { findById } = require('../Schemas/petSchema');
 
 
 const signup = async (req, res) => {
@@ -45,7 +46,6 @@ const login = (req, res) => {
 
 const handleLogout=async (req, res) => {
   try{
-  //  if (req.body.decoded){
     res.clearCookie('token');
     res.send({ok:true});
   }catch(err) {
@@ -55,9 +55,9 @@ const handleLogout=async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { _id } = req.body;
     const { userName, email, lastName, bio, phoneNumber } = req.body;
-    const user = await userCol.findById(id);
+    const user = await userCol.findById(_id);
     user.userName = userName;
     user.email = email;
     user.lastName = lastName;
@@ -83,8 +83,8 @@ const getAllUsers = async (req, res) => {
 const addPetToFavorites = async (req, res) => {
 try{
     const {petId} = req.body;
-    const {uid} = req.params;
-    const user = await userCol.findById(uid);
+    const {userid} = req.body;
+    const user = await userCol.findById(userid);
     user.interested = [...user.interested, petId];
     const updatedUser = await user.save();
     res.send(updatedUser);
@@ -95,8 +95,9 @@ try{
 
 const removePetFromFavorites = async (req, res) => {
     try{
-        const {uid, petId} = req.params;
-        const user = await userCol.findById(uid);
+        const {petId} = req.params;
+        const {userid} = req.body
+        const user = await userCol.findById(userid);
         user.interested = user.interested.filter(pet => pet!=petId)
         const updatedUser = await user.save();
         res.send(updatedUser);
@@ -108,8 +109,8 @@ const removePetFromFavorites = async (req, res) => {
 const addPetToAdopted = async (req, res) => {
 try{
     const {petId} = req.body;
-    const {uid} = req.params;
-    const user = await userCol.findById(uid);
+    const {userid} = req.body;
+    const user = await userCol.findById(userid);
     user.adoptedPets = [...user.adoptedPets, petId];
     user.fosteredPets = user.fosteredPets.filter(pet => pet !== petId);
     const updatedUser = await user.save();
@@ -120,8 +121,9 @@ try{
 
 const removePetFromAdoped = async (req, res) => {
   try{
-    const {uid, petID} = req.params;
-    const user = await userCol.findById(uid);
+    const {petID} = req.params;
+    const {userid} = req.body
+    const user = await userCol.findById(userid);
     user.adoptedPets = user.adoptedPets.filter(pet => pet !== petID);
     const updatedUser = await user.save();
 res.send(updatedUser);  
@@ -132,8 +134,9 @@ res.send(updatedUser);
 
 const addPetToFosteredUser = async (req, res) => {
   try{
-    const {uid, petId} = req.params;
-    const user = await userCol.findById(uid);
+    const {petId} = req.params;
+    const {userid} = req.body
+    const user = await userCol.findById(userid);
     user.fosteredPets = [...user.fosteredPets, petId];
     const updatedUser = await user.save();
     res.send(updatedUser);
@@ -142,4 +145,40 @@ const addPetToFosteredUser = async (req, res) => {
   }
 }
 
-module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser, handleLogout};
+const verifyUser = async (req, res)=>{
+  try{
+    const {userid} = req.body
+    const user = await userCol.findById(userid)
+    res.send(user)
+  }catch(err){console.log(err)}
+}
+
+const setAdmin = async (req, res)=>{
+  try{
+    const {userid}=req.body
+    const {id} = req.params
+   const user = await userCol.findById(userid)
+    if (user.admin){
+      const newAdmin = await userCol.findById(id)
+      newAdmin.admin = true
+      const updatedAdmin = await newAdmin.save()
+      res.send(updatedAdmin)
+    }
+  } catch(err){console.log(err)}
+}
+
+const removeAdmin = async (req, res)=>{
+  try{
+    const {userid}=req.body
+    const {id} = req.params
+   const user = await userCol.findById(userid)
+    if (user.admin){
+      const newAdmin = await userCol.findById(id)
+      newAdmin.admin = false
+      const updatedAdmin = await newAdmin.save()
+      res.send(updatedAdmin)
+    }
+  } catch(err){console.log(err)}
+}
+
+module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser, handleLogout, verifyUser, setAdmin, removeAdmin};

@@ -88,7 +88,7 @@ const auth = (req, res, next) => {
       res.status(401).send("Unauthorized");
       return;
     }
-    // req.body.decoded = decoded.id;
+    req.body.userid = decoded.id;
     next();
   }
   );

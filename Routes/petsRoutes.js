@@ -10,13 +10,11 @@ router.post('/add', auth, upload.single('picture'), uploadToCloudinary, addNewPe
 
 router.post('/search', searchPets)
 
-router.get('/adopt/:uid/:petId', auth, addPetToAdopted)
+router.get('/adopt/:petId', auth, addPetToAdopted)
 
 router.delete('/adopted/:petId', auth, removefromAdopted)
 
-router.get('/:petId/foster/:userId', 
-auth, 
-addToFostered)
+router.get('/:petId/foster', auth, addToFostered)
 
 router.put('/edit/:petId', auth, upload.single('picture'), uploadToCloudinary, editPet)
 

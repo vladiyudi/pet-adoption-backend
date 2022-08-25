@@ -35,8 +35,9 @@ const searchPets = async (req, res) => {
 
 const addPetToAdopted = async (req, res) => {
     try{
-        const {uid, petId} = req.params;
-        const updatedPet = await updatePetStatusAdopted(petId, uid);
+        const {petId} = req.params;
+        const {userid} = req.body
+        const updatedPet = await updatePetStatusAdopted(petId, userid);
         res.send(updatedPet);
     } catch (err) {
         console.log(err);
@@ -58,11 +59,11 @@ const removefromAdopted = async (req, res) => {
 
 const addToFostered = async (req, res) => {
     try{
-        const {petId, userId} = req.params;
-        // console.log(petId, userId)
+        const {petId} = req.params;
+        const {userid} = req.body
         const pet = await petCol.findById(petId);
         pet.adoptionStatus = "Fostered";
-        pet.owner = userId;
+        pet.owner = userid;
         const updatedPet = await pet.save();
         res.send(updatedPet);
     }
