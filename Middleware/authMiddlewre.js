@@ -79,10 +79,7 @@ const validateEmail = async (req, res, next) => {
 };
 
 const auth = (req, res, next) => {
-  // console.log("cook", req.cookies)
-  // console.log("req", req)
   const { token } = req.cookies;
-
   jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
     if (err) {
       res.status(401).send("Unauthorized");

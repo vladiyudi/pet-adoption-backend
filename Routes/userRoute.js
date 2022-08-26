@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {signup, login, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser, handleLogout, verifyUser, setAdmin, removeAdmin} = require('../Controllers/userControllers.js')
+const {signup, login, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser, handleLogout, verifyUser, setAdmin, removeAdmin, findUser} = require('../Controllers/userControllers.js')
 const {validateSignup, passwordMatch, validateNewUser, validateLogin, validatePasswordMatch, validateEmail, validateUpdateUser, auth}=require('../Middleware/authMiddlewre')
 const {signUpSchema, loginSchema, updateSchema}=require('../Schemas/Schemas.js')
 
@@ -32,5 +32,7 @@ router.get('/verify', auth, verifyUser)
 router.get('/admin/:id', auth, setAdmin)
 
 router.get('/remove/:id', auth, removeAdmin ) 
+
+router.get('/find/:id', auth, findUser)
 
 module.exports = router

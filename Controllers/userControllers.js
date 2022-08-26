@@ -181,4 +181,12 @@ const removeAdmin = async (req, res)=>{
   } catch(err){console.log(err)}
 }
 
-module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser, handleLogout, verifyUser, setAdmin, removeAdmin};
+const findUser = async (req, res)=>{
+  try{
+    const {id}=req.params
+    const user = await userCol.findById(id)
+    res.send(user)
+  } catch(err){console.log(err)}
+}
+
+module.exports = { login, signup, updateUser, getAllUsers, addPetToFavorites, addPetToAdopted, removePetFromFavorites, removePetFromAdoped, addPetToFosteredUser, handleLogout, verifyUser, setAdmin, removeAdmin, findUser};
