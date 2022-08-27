@@ -91,4 +91,16 @@ const editPet = async (req, res) => {
         console.log(err);
     }
 }
-module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet};
+
+const findPet = async (req, res)=>{
+    try{
+    const {id} = req.params
+    console.log(id)
+    const pet = await petCol.findById(id)
+    res.send(pet)} catch (err){
+        console.log(err)
+    }
+}
+
+
+module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet, findPet};

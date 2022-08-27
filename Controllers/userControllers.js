@@ -125,6 +125,7 @@ const removePetFromAdoped = async (req, res) => {
     const {userid} = req.body
     const user = await userCol.findById(userid);
     user.adoptedPets = user.adoptedPets.filter(pet => pet !== petID);
+    user.fosteredPets=user.fosteredPets.filter(pet => pet !== petID)
     const updatedUser = await user.save();
 res.send(updatedUser);  
   }catch(err) {
