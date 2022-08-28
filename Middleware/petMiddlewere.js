@@ -12,7 +12,8 @@ cloudinary.config({
 
 const uploadToCloudinary = (req, res, next) => {
   if (!req.file) {
-    res.status(400).send("No file uploaded");
+    next()
+    // res.status(400).send("No file uploaded");
     return;
   }
   cloudinary.uploader.upload(req.file.path, (err, result) => {

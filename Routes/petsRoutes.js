@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet, findPet} = require('../Controllers/petsControllers')
+const {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet, findPet, fetchNews} = require('../Controllers/petsControllers')
 const {upload, uploadToCloudinary} = require('../Middleware/petMiddlewere')
 const {auth} = require('../Middleware/authMiddlewre')
 
@@ -19,5 +19,7 @@ router.get('/:petId/foster', auth, addToFostered)
 router.put('/edit/:petId', auth, upload.single('picture'), uploadToCloudinary, editPet)
 
 router.get('/find/:id', auth, findPet)
+
+router.get('/news', auth, fetchNews)
 
 module.exports = router

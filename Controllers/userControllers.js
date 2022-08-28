@@ -5,7 +5,7 @@ const {
   hashPassword,
   saveUser,
 } = require("../Models/usersModels");
-const { getMongoUserByEmail } = require("../Models/usersModels");
+const { updateNewsUser, updateNewsAdoptionStatus } = require("../Models/usersModels");
 const userCol = require("../Schemas/mongooseSchemas");
 const { findById } = require('../Schemas/petSchema');
 
@@ -27,6 +27,7 @@ const signup = async (req, res) => {
       profileImage: "",
     };
     const dbUser = await saveUser(user);
+    updateNewsUser(dbUser)
     if (dbUser) res.send(dbUser);
   } catch (err) {
     res.status(500).send("problem with signup");
@@ -114,6 +115,7 @@ try{
     user.adoptedPets = [...user.adoptedPets, petId];
     user.fosteredPets = user.fosteredPets.filter(pet => pet !== petId);
     const updatedUser = await user.save();
+    updateNewsAdoptionStatus(updatedUser, petId, 'adopted')
     res.send(updatedUser);} 
     catch (err) {
     res.status(500).send("problem with addPetToAdopted");}
@@ -127,6 +129,7 @@ const removePetFromAdoped = async (req, res) => {
     user.adoptedPets = user.adoptedPets.filter(pet => pet !== petID);
     user.fosteredPets=user.fosteredPets.filter(pet => pet !== petID)
     const updatedUser = await user.save();
+    updateNewsAdoptionStatus(updatedUser, petID, 'returned')
 res.send(updatedUser);  
   }catch(err) {
     res.status(500).send("problem with removePetFromAdoped");
@@ -140,6 +143,7 @@ const addPetToFosteredUser = async (req, res) => {
     const user = await userCol.findById(userid);
     user.fosteredPets = [...user.fosteredPets, petId];
     const updatedUser = await user.save();
+    updateNewsAdoptionStatus(updatedUser, petId, 'fostered')
     res.send(updatedUser);
   }catch(err) {
     res.status(500).send("problem with addPetToFosteredUser");

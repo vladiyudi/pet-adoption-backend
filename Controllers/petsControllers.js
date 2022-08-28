@@ -1,7 +1,8 @@
 const { v4: uuidv4 } = require("uuid");
-const {queryPetsfromMongo, updatePetStatusAdopted} = require("../Models/petsModels");
+const {queryPetsfromMongo, updatePetStatusAdopted, updateNewsPet} = require("../Models/petsModels");
 const petCol = require('../Schemas/petSchema');
 const multer = require('multer')
+const newsCol = require('../Schemas/newsSchema')
 
 const getAllPets =async (req, res) => {
     try {
@@ -15,9 +16,9 @@ const getAllPets =async (req, res) => {
 
 const addNewPet = async (req, res) => {
     try {
-        // console.log(req.body.picture)
         const newPet = new petCol(req.body);
         const savedPet = await newPet.save();
+        updateNewsPet(req.body)
         res.send(savedPet);
     } catch (err) {
         console.log(err);
@@ -102,5 +103,15 @@ const findPet = async (req, res)=>{
     }
 }
 
+const fetchNews = async (req, res)=>{
+try{
+    const news = await newsCol.find().sort({
+        dateCreated: -1});
+    res.send(news)
+}catch (err){
+    console.log(err)
+}
+}
 
-module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet, findPet};
+
+module.exports = {getAllPets, addNewPet, searchPets, addPetToAdopted, removefromAdopted, addToFostered, editPet, findPet, fetchNews};

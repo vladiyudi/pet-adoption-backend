@@ -1,19 +1,21 @@
 const petCol = require("../Schemas/petSchema");
+const newsCol = require('../Schemas/newsSchema')
 
 const queryPetsfromMongo = async (query) => {
   try {
-    let { name, type, status, minHeight, maxHeight, minWeight, maxWeight } =
+    let { name, type, adoptionStatus, minHeight, maxHeight, minWeight, maxWeight } =
       query;
     // if (!status) status = "Available";
     if (!minHeight) minHeight = 1;
     if (!maxHeight) maxHeight = 100;
     if (!minWeight) minWeight = 1;
     if (!maxWeight) maxWeight = 100;
+
     const queryPets = await petCol
       .find({
         name: { $regex: name, $options: "i" },
         type: { $regex: type, $options: "i" },
-        status: { $regex: status, $options: "i" },
+        adoptionStatus: { $regex: adoptionStatus, $options: "i" },
         height: { $gte: minHeight, $lte: maxHeight },
         weight: { $gte: minWeight, $lte: maxWeight },
       })
@@ -36,4 +38,15 @@ const updatePetStatusAdopted = async (petId, userId) => {
     }
 }
 
-module.exports = { queryPetsfromMongo, updatePetStatusAdopted };
+const updateNewsPet = async (pet)=>{
+  try{
+    const {name, type} = pet
+    const newFeed = {news: `new ${type} ${name} was added`}
+    const news = new newsCol(newFeed)
+    news.save()
+  } catch (err){
+    console.log(err)
+  }
+}
+
+module.exports = { queryPetsfromMongo, updatePetStatusAdopted, updateNewsPet };
