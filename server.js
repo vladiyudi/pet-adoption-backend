@@ -3,6 +3,17 @@ const app = express()
 const PORT = process.env.PORT || 8080
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const io = require('socket.io')(app.listen(PORT), { origins: '*:*' })
+
+io.on('connection', (socket) => {
+    socket.join("some room")
+    console.log('a user connected!')
+    socket.emit('message',{message: 'welcome to the chat!', user: 'Admin'} )
+    socket.on('message', (data) => {console.log(data)
+    io.to('some room').emit('message', data) 
+    // socket.emit('message', data)
+})  
+})
 
 const userRouter = require('./Routes/userRoute')
 const petRouter = require('./Routes/petsRoutes')
@@ -22,6 +33,6 @@ app.use('/images', express.static('images'))
 app.use('/api/users', userRouter)
 app.use('/api/pets', petRouter)
 
-app.listen(PORT,()=>{
-    console.log(`listening ${PORT}`)
-})
+// app.listen(PORT,()=>{
+//     console.log(`listening ${PORT}`)
+// })
