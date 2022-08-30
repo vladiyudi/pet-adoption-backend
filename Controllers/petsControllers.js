@@ -34,12 +34,14 @@ const searchPets = async (req, res) => {
     }
 }
 
-const addPetToAdopted = async (req, res) => {
+const addPetToAdopted = async (req, res, next) => {
     try{
         const {petId} = req.params;
         const {userid} = req.body
         const updatedPet = await updatePetStatusAdopted(petId, userid);
+        req.body.pet = updatedPet
         res.send(updatedPet);
+        next()
     } catch (err) {
         console.log(err);
     }
@@ -96,7 +98,6 @@ const editPet = async (req, res) => {
 const findPet = async (req, res)=>{
     try{
     const {id} = req.params
-    console.log(id)
     const pet = await petCol.findById(id)
     res.send(pet)} catch (err){
         console.log(err)

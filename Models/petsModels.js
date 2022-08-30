@@ -1,11 +1,12 @@
 const petCol = require("../Schemas/petSchema");
 const newsCol = require('../Schemas/newsSchema')
+const nameSpace = require('../server')
+
 
 const queryPetsfromMongo = async (query) => {
   try {
     let { name, type, adoptionStatus, minHeight, maxHeight, minWeight, maxWeight } =
       query;
-    // if (!status) status = "Available";
     if (!minHeight) minHeight = 1;
     if (!maxHeight) maxHeight = 100;
     if (!minWeight) minWeight = 1;
@@ -48,5 +49,6 @@ const updateNewsPet = async (pet)=>{
     console.log(err)
   }
 }
+
 
 module.exports = { queryPetsfromMongo, updatePetStatusAdopted, updateNewsPet };
