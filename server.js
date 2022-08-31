@@ -5,6 +5,7 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const io = require('socket.io')(app.listen(PORT), { origins: '*:*' })
 const petCol = require('./Schemas/petSchema')
+const pino = require('pino-http')
 
 io.on('connection', (socket) => {
     socket.join("some room")
@@ -14,7 +15,6 @@ io.on('connection', (socket) => {
 })
 
 const nameSpace = io.of('/serverNews')
-
 nameSpace.on('connection', (socket) => {
     petCol.watch().on('change', (change) => {
         socket.emit('message', change)
@@ -38,6 +38,7 @@ app.use(cors({origin: 'http://localhost:3000', credentials: true}))
 app.use('/images', express.static('images'))
 app.use('/api/users', userRouter)
 app.use('/api/pets', petRouter)
+app.use(pino({level: process.env.LOG_LEVEL}))
 
 // app.listen(PORT,()=>{
 //     console.log(`listening ${PORT}`)
