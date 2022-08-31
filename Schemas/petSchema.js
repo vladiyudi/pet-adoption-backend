@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 
 const petSchema = new mongoose.Schema({
-    name: String,
-    type: String,
+    name: {type: String, required: true},
+    type: {type: String, required: true},
     bio: String,
-    breed: String,
+    breed: {type: String, required: true},
     color: String,
     dateCreated: {type: Date, default: Date.now},
     height: {type: Number, min :1, max: 100},

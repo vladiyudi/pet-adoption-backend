@@ -10,6 +10,7 @@ const getAllPets =async (req, res) => {
             dateCreated: -1});
         res.send(allPets);
     } catch (err) {
+        res.status(500).send(err)
         console.log(err);
     }
 }
@@ -21,6 +22,7 @@ const addNewPet = async (req, res) => {
         updateNewsPet(req.body)
         res.send(savedPet);
     } catch (err) {
+        res.status(500).send(err)
         console.log(err);
     }
 }
@@ -30,6 +32,7 @@ const searchPets = async (req, res) => {
         const searchResult = await queryPetsfromMongo(req.body)
         res.send(searchResult);
     } catch (err) {
+        res.status(500).send(err)
         console.log(err);
     }
 }
@@ -43,6 +46,7 @@ const addPetToAdopted = async (req, res, next) => {
         res.send(updatedPet);
         next()
     } catch (err) {
+        res.status(500).send(err)
         console.log(err);
     }
 }
@@ -56,6 +60,7 @@ const removefromAdopted = async (req, res) => {
         const updatedPet = await pet.save();
         res.send(updatedPet);
     } catch (err) {
+        res.status(500).send(err)
         console.log(err);
     }
 }
@@ -71,6 +76,7 @@ const addToFostered = async (req, res) => {
         res.send(updatedPet);
     }
      catch (err) {
+        res.status(500).send(err)
         console.log(err);  
 }}
 const editPet = async (req, res) => {
@@ -87,10 +93,11 @@ const editPet = async (req, res) => {
         pet.weight = weight;
         pet.height = height;
         pet.color = color;
-        pet.picture = picture;
+        if (picture) pet.picture = picture;
         const updatedPet = await pet.save();
         res.send(updatedPet);
     }catch(err){
+        res.status(400).send(err)
         console.log(err);
     }
 }
@@ -100,6 +107,7 @@ const findPet = async (req, res)=>{
     const {id} = req.params
     const pet = await petCol.findById(id)
     res.send(pet)} catch (err){
+        res.status(400).send(err)
         console.log(err)
     }
 }
@@ -110,6 +118,7 @@ try{
         dateCreated: -1});
     res.send(news)
 }catch (err){
+    res.status(400).send(err)
     console.log(err)
 }
 }
