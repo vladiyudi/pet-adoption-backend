@@ -34,7 +34,7 @@ db.on('error', console.error.bind(console, 'connection error:'))
 
 app.use(cookieParser())
 app.use(express.json())
-app.use(cors({origin: 'http://localhost:3000', credentials: true}))
+app.use(cors({origin: process.env.BASE_URL, credentials: true}))
 app.use('/images', express.static('images'))
 app.use('/api/users', userRouter)
 app.use('/api/pets', petRouter)
